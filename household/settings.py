@@ -115,3 +115,8 @@ AUTH_USER_MODEL = "core.User"
 # Redirect unauthenticated users to our custom login page
 from django.urls import reverse_lazy
 LOGIN_URL = reverse_lazy('login')   # or simply '/login/'
+import os
+
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+DEBUG = os.environ.get('DEBUG') == 'True'
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
