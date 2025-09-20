@@ -1,0 +1,101 @@
+### LOGIN (establish session)
+POST http://127.0.0.1:8000/login/
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "890admin"
+}
+
+###
+
+### REGISTER NEW USER
+POST http://127.0.0.1:8000/register/
+Content-Type: application/json
+
+{
+    "username": "client1",
+    "email": "client1@example.com",
+    "password": "client123",
+    "role": "client"
+}
+
+###
+
+### GET PROFILE (logged-in user)
+GET http://127.0.0.1:8000/profile/
+
+###
+
+### UPDATE PROFILE
+PUT http://127.0.0.1:8000/profile/
+Content-Type: application/json
+
+{
+    "bio": "Hello, I am a client!",
+    "facebook": "https://facebook.com/client1"
+}
+
+###
+
+### LIST SERVICES
+GET http://127.0.0.1:8000/api/services/
+
+###
+
+### ADD NEW SERVICE (ADMIN ONLY)
+POST http://127.0.0.1:8000/api/services/
+Content-Type: application/json
+
+{
+    "name": "Home Cleaning",
+    "description": "Complete home cleaning service",
+    "price": "50.00"
+}
+
+###
+
+### LIST CART ITEMS
+GET http://127.0.0.1:8000/api/cart/
+
+###
+
+### ADD TO CART
+POST http://127.0.0.1:8000/api/cart/
+Content-Type: application/json
+
+{
+    "items": [
+        {
+            "service_id": 1,
+            "quantity": 2
+        }
+    ]
+}
+
+###
+
+### VIEW REVIEWS
+GET http://127.0.0.1:8000/api/reviews/
+
+###
+
+### ADD REVIEW
+POST http://127.0.0.1:8000/api/reviews/
+Content-Type: application/json
+
+{
+    "service": 1,
+    "rating": 5,
+    "comment": "Excellent service!"
+}
+
+###
+
+### PROMOTE CLIENT TO ADMIN (ADMIN ONLY)
+PUT http://127.0.0.1:8000/promote/2/
+Content-Type: application/json
+
+{
+    "role": "admin"
+}
