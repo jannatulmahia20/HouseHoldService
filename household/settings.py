@@ -112,3 +112,6 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = "core.User"
+# Redirect unauthenticated users to our custom login page
+from django.urls import reverse_lazy
+LOGIN_URL = reverse_lazy('login')   # or simply '/login/'

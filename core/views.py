@@ -275,13 +275,13 @@ def add_to_cart(request, service_id):
     
     service = get_object_or_404(Service, id=service_id)
     
-    # Get or create user's cart
+    
     cart, created = Cart.objects.get_or_create(user=request.user)
     
-    # Add service to cart
+    
     cart_item, created = CartItem.objects.get_or_create(cart=cart, service=service)
     
-    # Optional: increment quantity if already exists
+    
     if not created:
         cart_item.quantity += 1
         cart_item.save()

@@ -23,12 +23,13 @@ router.register(r"orders", OrderViewSet, basename="orders")
 
 urlpatterns = [
     # Redirect root
-    path("", redirect_to_api, name="home"),
+    path("", home, name="home"),
 
     # Auth endpoints
     path("register/", RegisterView.as_view(), name="register"),
     path("login/", LoginView.as_view(), name="login"),
-    path('profile/', profile_page, name='profile'),
+    path('profile/', profile_page, name='profile-page'),
+
 
 
     path("promote/<int:pk>/", PromoteToAdminView.as_view(), name="promote-to-admin"),
@@ -42,9 +43,10 @@ urlpatterns = [
     # Frontend pages
     path('home-page/', home, name='home-page'),
     path('services-page/', services_page, name='services-page'),
-    path('cart-page/', cart_page, name='cart-page'),
+    path('cart/', cart_page, name='cart-page'),
+
     path('checkout-page/', checkout_page, name='checkout-page'),
-    path('profile-page/', profile_page, name='profile-page'),
+    
     path("logout/", LogoutView.as_view(next_page="home-page"), name="logout"),
     path('add-to-cart/<int:service_id>/', add_to_cart, name='add-to-cart'),
     path('remove-from-cart/<int:item_id>/', remove_from_cart, name='remove-from-cart'),
