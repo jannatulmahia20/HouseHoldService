@@ -5,14 +5,12 @@ from django.urls import reverse_lazy
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# ---------------------------------------------------------------------
-# SECURITY
-# ---------------------------------------------------------------------
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "unsafe-secret-key")  # use env in production
-DEBUG = os.environ.get("DEBUG", "False") == "True"
+import os
 
-# Allow your Vercel domain + localhost
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", ".vercel.app,.now.sh,localhost,127.0.0.1").split(",")
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+DEBUG = os.environ.get("DEBUG") == "True"
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
+
 
 # ---------------------------------------------------------------------
 # APPLICATIONS
