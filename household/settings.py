@@ -1,13 +1,22 @@
 from pathlib import Path
 from datetime import timedelta
+import os
+from django.urls import reverse_lazy
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "django-insecure-your-secret-key"  # change in production
-DEBUG = True
-ALLOWED_HOSTS = []  # later you’ll add your domain or IP when deploying
+# ---------------------------------------------------------------------
+# SECURITY
+# ---------------------------------------------------------------------
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "unsafe-secret-key")  # use env in production
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-# ---------------- Installed Apps ----------------
+# Allow your Vercel domain + localhost
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", ".vercel.app,.now.sh,localhost,127.0.0.1").split(",")
+
+# ---------------------------------------------------------------------
+# APPLICATIONS
+# ---------------------------------------------------------------------
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -19,15 +28,17 @@ INSTALLED_APPS = [
     # Third-party
     "rest_framework",
     "rest_framework_simplejwt",
-    
+
     # Local
     "core",
 ]
 
-# ---------------- Middleware ----------------
+# ---------------------------------------------------------------------
+# MIDDLEWARE
+# ---------------------------------------------------------------------
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",   # For static files in deployment
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # static files in production
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -41,7 +52,7 @@ ROOT_URLCONF = "household.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],   # custom template folder
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -56,7 +67,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "household.wsgi.application"
 
-# ---------------- Database ----------------
+# ---------------------------------------------------------------------
+# DATABASE
+# ---------------------------------------------------------------------
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -64,7 +77,9 @@ DATABASES = {
     }
 }
 
-# ---------------- Passwords ----------------
+# ---------------------------------------------------------------------
+# PASSWORD VALIDATION
+# ---------------------------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
@@ -72,28 +87,36 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# ---------------- Language & Time ----------------
+# ---------------------------------------------------------------------
+# INTERNATIONALIZATION
+# ---------------------------------------------------------------------
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "Asia/Dhaka"
 USE_I18N = True
 USE_TZ = True
 
-# ---------------- Static & Media ----------------
+# ---------------------------------------------------------------------
+# STATIC & MEDIA
+# ---------------------------------------------------------------------
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# ---------------- DRF & JWT ----------------
+# ---------------------------------------------------------------------
+# REST FRAMEWORK & JWT
+# ---------------------------------------------------------------------
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.BasicAuthentication",
-        # If using JWT too, add: "rest_framework_simplejwt.authentication.JWTAuthentication",
+        # Uncomment if you use JWT:
+        # "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
@@ -104,19 +127,14 @@ REST_FRAMEWORK = {
     ],
 }
 
-
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
+# ---------------------------------------------------------------------
+# AUTH / LOGIN
+# ---------------------------------------------------------------------
 AUTH_USER_MODEL = "core.User"
-# Redirect unauthenticated users to our custom login page
-from django.urls import reverse_lazy
-LOGIN_URL = reverse_lazy('login')   # or simply '/login/'
-import os
-
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
-DEBUG = os.environ.get('DEBUG') == 'True'
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
+LOGIN_URL = reverse_lazy("login")
