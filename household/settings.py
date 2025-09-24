@@ -12,7 +12,11 @@ SECRET_KEY = os.environ.get(
     'dev-secret-key-change-this-in-production'
 )
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = [
+    'householdservice-s3c7.onrender.com',  # Render URL
+    'localhost', '127.0.0.1'
+]
+
 
 
 
