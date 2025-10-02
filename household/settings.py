@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     "core",
 ]
 
+
+
+
 # ---------------------------------------------------------------------
 # MIDDLEWARE
 # ---------------------------------------------------------------------
@@ -144,3 +147,8 @@ SIMPLE_JWT = {
 # ---------------------------------------------------------------------
 AUTH_USER_MODEL = "core.User"
 LOGIN_URL = reverse_lazy("login")
+
+
+INSTALLED_APPS += ["corsheaders"]
+MIDDLEWARE = ["corsheaders.middleware.CorsMiddleware"] + MIDDLEWARE
+CORS_ALLOW_ALL_ORIGINS = True  
