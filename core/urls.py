@@ -31,4 +31,9 @@ urlpatterns = [
 
     # DRF API router
     path("api/", include(router.urls)),
+    # Keep these in urls.py:
+path("api/services/", ServiceViewSet.as_view({'get': 'list'})),
+path("api/cart/", CartViewSet.as_view({'get': 'list'})),
+# etc.
+
 ]

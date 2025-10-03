@@ -1,8 +1,9 @@
+# core/models.py
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
 
-# ---------------- User ----------------
+# ------------------ Custom User ------------------
 class User(AbstractUser):
     ROLE_CHOICES = (("admin", "Admin"), ("client", "Client"))
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default="client")
@@ -15,25 +16,31 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
-# FK helper
-AUTH_USER = settings.AUTH_USER_MODEL
+User = settings.AUTH_USER_MODEL  # For ForeignKeys below
 
-# ---------------- Service ----------------
+
+# ------------------ Service ------------------
 class Service(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    rating = models.FloatField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
 
-# ---------------- Cart ----------------
+
+# ------------------ Cart ------------------
 class Cart(models.Model):
-    user = models.OneToOneField(AUTH_USER, on_delete=models.CASCADE, related_name="cart")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="cart")
 
     def __str__(self):
-        return f"{self.user.username}'s Cart"
+        try:
+            return f"{self.user.username}'s Cart"
+        except Exception:
+            return "Cart"
+
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
@@ -43,18 +50,23 @@ class CartItem(models.Model):
     def __str__(self):
         return f"{self.quantity} x {self.service.name}"
 
-# ---------------- Review ----------------
+
+# ------------------ Review ------------------
 class Review(models.Model):
-    user = models.ForeignKey(AUTH_USER, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name="reviews")
     rating = models.IntegerField()  # 1..5
     comment = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.service.name} ({self.rating})"
+        try:
+            return f"{self.user.username} - {self.service.name} ({self.rating})"
+        except Exception:
+            return f"Review {self.pk}"
 
-# ---------------- Order ----------------
+
+# ------------------ Order ------------------
 class Order(models.Model):
     STATUS_CHOICES = (
         ('pending', 'Pending'),
@@ -67,20 +79,21 @@ class Order(models.Model):
         ('failed', 'Failed'),
     )
 
-    user = models.ForeignKey(AUTH_USER, on_delete=models.CASCADE, null=True, blank=True)
-    name = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)   # For checkout form
     email = models.EmailField()
     phone = models.CharField(max_length=20)
     address = models.TextField()
+
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     payment_status = models.CharField(max_length=20, choices=PAYMENT_CHOICES, default='pending')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Order {self.id} - {self.name}"
+        return f"Order {self.id} by {self.name}"
 
-# ---------------- OrderItem ----------------
+
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
