@@ -1,15 +1,9 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "household/wsgi.py",
-      "use": "@vercel/python"
-    }
+    { "src": "index.js", "use": "@vercel/node" }
   ],
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "household/wsgi.py"
-    }
+    { "src": "/(.*)", "dest": "index.js" }
   ]
 }
