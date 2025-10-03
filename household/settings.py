@@ -39,7 +39,7 @@ INSTALLED_APPS = [
 
     # Local
     "core",
-    "payments",
+    # "payments",
 ]
 
 
