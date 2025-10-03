@@ -152,3 +152,7 @@ LOGIN_URL = reverse_lazy("login")
 INSTALLED_APPS += ["corsheaders"]
 MIDDLEWARE = ["corsheaders.middleware.CorsMiddleware"] + MIDDLEWARE
 CORS_ALLOW_ALL_ORIGINS = True  
+
+SSLCZ_STORE_ID = "your_store_id"
+SSLCZ_STORE_PASS = "your_store_password"
+SSLCZ_API_URL = "https://sandbox.sslcommerz.com/gwprocess/v4/api.php"  # Sandbox
