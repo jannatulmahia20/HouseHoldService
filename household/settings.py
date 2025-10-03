@@ -13,9 +13,11 @@ SECRET_KEY = os.environ.get(
 )
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 ALLOWED_HOSTS = [
-    'householdservice-s3c7.onrender.com',  # Render URL
-    'localhost', '127.0.0.1'
+    'householdservice-1.onrender.com',
+    'localhost',
+    '127.0.0.1'
 ]
+
 
 
 
