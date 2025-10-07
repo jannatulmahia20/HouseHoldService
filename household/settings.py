@@ -13,7 +13,7 @@ SECRET_KEY = os.environ.get(
 )
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 ALLOWED_HOSTS = [
-    'householdservice-1.onrender.com',
+    'householdservice-2.onrender.com',
     'localhost',
     '127.0.0.1'
 ]
