@@ -6,5 +6,5 @@ urlpatterns = [
     path("", home, name="home"),  
     path("admin/", admin.site.urls),
     path("register/", include("core.urls")),  
-    path("api/", include("core.api_urls")),  
+    # path("api/", include("core.api_urls")),  
 ]
