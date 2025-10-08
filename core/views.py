@@ -184,3 +184,9 @@ def remove_from_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id)
     cart_item.delete()
     return Response({"detail": "Item removed from cart"})
+
+
+from django.shortcuts import render
+
+def home(request):
+    return render(request, "home.html")
