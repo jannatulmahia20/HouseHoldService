@@ -5,6 +5,7 @@ from rest_framework.response import Response
 
 @api_view(["POST"])
 def create_order(request):
+    user = request.user
     data = request.data  
 
     post_data = {
@@ -24,6 +25,7 @@ def create_order(request):
         "product_name": data.get("service"),
         "product_category": "Household",
         "product_profile": "general",
+        "cus_name": user.username,
     }
 
     response = requests.post(settings.SSLCZ_API_URL, data=post_data)
