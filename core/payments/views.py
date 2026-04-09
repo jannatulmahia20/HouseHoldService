@@ -8,30 +8,42 @@ def create_order(request):
     user = request.user
     data = request.data  
 
+    # Use your live Render URL instead of localhost
+    base_url = "https://householdservice-2.onrender.com"
+
     post_data = {
         "store_id": settings.SSLCZ_STORE_ID,
         "store_passwd": settings.SSLCZ_STORE_PASS,
-        "total_amount": 1000,  # 🔹 You can set based on service plan
+        "total_amount": 1000, 
         "currency": "BDT",
-        "tran_id": "ORDER12345",  # Generate unique ID
-        "success_url": "http://localhost:8000/api/payment/success/",
-        "fail_url": "http://localhost:8000/api/payment/fail/",
-        "cancel_url": "http://localhost:8000/api/payment/cancel/",
-        "cus_name": data.get("name"),
-        "cus_email": "customer@example.com",
-        "cus_add1": data.get("address"),
-        "cus_phone": data.get("phone"),
+        "tran_id": "ORDER12345", 
+        "success_url": f"{base_url}/api/payment/success/",
+        "fail_url": f"{base_url}/api/payment/fail/",
+        "cancel_url": f"{base_url}/api/payment/cancel/",
+        "cus_name": user.username if user.is_authenticated else "Guest User",
+        "cus_email": getattr(user, 'email', 'customer@example.com'),
+        "cus_add1": data.get("address", "Dhaka"), 
+        "cus_phone": data.get("phone", "01700000000"), 
         "shipping_method": "NO",
-        "product_name": data.get("service"),
+        "product_name": data.get("service", "General Service"),
         "product_category": "Household",
         "product_profile": "general",
-        "cus_name": user.username,
     }
 
+    
     response = requests.post(settings.SSLCZ_API_URL, data=post_data)
-    result = response.json()
+    
+    try:
+        result = response.json()
+    except Exception as e:
+        return Response({"error": "SSLCommerz returned non-JSON response", "details": response.text}, status=500)
 
-    if "GatewayPageURL" in result:
+    if result.get("status") == "SUCCESS":
         return Response({"GatewayPageURL": result["GatewayPageURL"]})
     else:
-        return Response({"error": "Failed to initiate payment", "details": result}, status=400)
+        
+        return Response({
+            "error": "Failed to initiate payment", 
+            "details": result.get("failedreason", "Unknown error"),
+            "full_response": result
+        }, status=400)
