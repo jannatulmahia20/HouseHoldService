@@ -1,9 +1,10 @@
 # 🏠 HouseHoldService
 
 A full-stack household services booking web application built with **Django REST Framework** and **JavaScript**. Users can browse available household services (cleaning, plumbing, electrical, etc.), register/login, and book a service provider — all through a clean, responsive interface.
+## Live Demo
 
-🔗 **Live Demo:** https://household-frontend-three.vercel.app/
-
+- 🌐 Frontend: https://household-frontend-three.vercel.app/
+- 🔧 Backend API: https://householdservice-2.onrender.com/
 ---
 
 ## ✨ Features
