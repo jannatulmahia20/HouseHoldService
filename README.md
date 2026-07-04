@@ -2,7 +2,7 @@
 
 A full-stack household services booking web application built with **Django REST Framework** and **JavaScript**. Users can browse available household services (cleaning, plumbing, electrical, etc.), register/login, and book a service provider — all through a clean, responsive interface.
 
-🔗 **Live Demo:** [house-hold-service.vercel.app](https://house-hold-service.vercel.app)
+🔗 **Live Demo:** https://household-frontend-three.vercel.app/
 
 ---
 
